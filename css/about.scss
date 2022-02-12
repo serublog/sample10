@@ -1,0 +1,534 @@
+@charset "UTF-8";
+/*==================================================================
+# 設定
+================================================================= */
+
+/* 色
+-------------------------------------------------------------*/
+$color-text-base: #333;
+
+
+/* レイアウト値
+-------------------------------------------------------------*/
+$layout-width-canvas: 1440px;
+$layout-width-inner: 1100px;
+
+
+/* 階層
+-------------------------------------------------------------*/
+$layer: (
+  modal: 100, // モダール
+  drawer: 40, // ドロワー
+  floating: 30, // フローティングアイテム
+  header: 20, // ヘッダー
+  footer: 10, // フッター
+  default: 1,
+);
+
+/* ブレークポイント
+-------------------------------------------------------------*/
+ // マップ型変数breakpointsを定義
+$breakpoints: (
+    'sm': 'screen and (max-width: 767px)',
+    'md': 'screen and (min-width: 768px)',
+) !default;
+
+/* メディアクエリー
+-------------------------------------------------------------*/
+@mixin  mq($breakpoint: md) {
+// map-get(マップ変数型,キー)で値を取得
+@media #{map-get($breakpoints, $breakpoint)} {
+    // この中をカスタムできる
+    @content;
+}
+
+}
+
+/*==================================================================
+# 初期化
+================================================================= */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  font-family: 'Montserrat', 'Noto Sans JP', sans-serif;
+  font-size: 1.6rem;
+  color: $color-text-base;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  overflow-wrap: break-word;
+}
+
+img,svg {
+  width: 100%;
+  vertical-align: bottom;
+  height: auto;
+  border: none;
+}
+
+a {
+    text-decoration: none;
+    display: inline-block;
+
+    &:hover {
+        opacity: 0.7;
+        transition: .3s;
+    }
+}
+
+button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    padding: 0;
+    appearance: none;
+}
+
+/*==================================================================
+#  補完クラス
+================================================================= */
+
+/* PCだけ非表示
+-------------------------------------------------------------*/
+.hidden-pc {
+  @include mq('md') {
+    display: none;
+  }
+}
+
+/*タブレットだけ非表示 
+-------------------------------------------------------------*/
+.hidden-md {
+  @include mq('md') {
+    display: none;
+  }
+}
+
+/*スマホだけ非表示 
+-------------------------------------------------------------*/
+.hidden-sm {
+  @include mq('sm') {
+    display: none;
+  }
+}
+
+/* 共通クラス
+-------------------------------------------------------------*/
+.section-wrapper {
+    padding-top: 120px;
+
+    @include mq('sm'){
+        padding-top: 80px;
+    }
+
+    &:last-of-type {
+        padding-bottom: 120px;
+
+        @include mq('sm'){
+            padding-bottom: 80px;
+        }
+    }
+}
+
+
+.section-title {
+    font-size: 3.2rem;
+    font-weight: 800;
+    letter-spacing: .068em;
+    margin-bottom: 30px;
+
+    @include mq('sm'){
+        font-size: 2.8rem;
+    }
+}
+
+.content-wrapper {
+    max-width: $layout-width-inner;
+    margin: 0 auto;
+    padding: 0 4vw;
+    box-sizing: content-box;
+}
+
+.lines {
+    line-height: 2;
+}
+
+.relative {
+    position: relative;
+    padding-top: 150px;
+}
+
+.gray-bg {
+    background-color: #F0F0F0;
+}
+
+/*==================================================================
+# header
+================================================================= */
+.header {
+    background-color: brown;
+}
+
+.site-title {
+    width: 260px;
+    position: fixed;
+    top: 31px;
+    left: 4vw;
+    z-index: 1;
+
+    &.black svg path {
+        fill: #333;
+        transition: fill .3s;
+    }
+
+    @include mq('sm'){
+        top: 20px;
+        width: 190px;
+    }
+}
+
+.header-nav {
+    font-size: 2rem;
+    font-weight: 800;
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100vh;
+    width: 36.1vw;
+    text-align: center;
+    padding: 120px 0 0;
+    background: rgba(34,34,34, .95);
+    z-index: 2;
+    transform: translateX(100%);
+    opacity: 0;
+    transition: transform .3s, opacity .3s;
+
+    &.open {
+        transform: translateX(0);
+        opacity: 1;
+        transition: transform .3s ,opacity.3s;
+    }
+}
+
+.nav-list {
+
+}
+
+.nav-item {
+    margin-bottom: 30px;
+
+    &:first-of-type {
+        margin-bottom: 40px;
+    }
+
+    &:last-of-type {
+        margin-bottom: 0;
+    }
+}
+
+.nav-item-link {
+    color: #fff;
+}
+
+.burger-btn {
+    display: flex;
+    align-items: center;
+    position: fixed;
+    top: 36px;
+    right: 4vw;
+    z-index: 3;
+    
+    @include mq('sm'){
+        top: 24px;
+    }
+
+    &.black {
+        .bar {
+            background-color: #333;
+            transition: background-color .3s;
+        }
+
+        .menu {
+            color: #333;
+            transition: color .3s;
+        }
+    }
+}
+
+.bar {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background-color: #fff;
+    border-radius: 1px;
+
+    &.cross {
+        &.bar-top {
+            transform: rotate(30deg)translateY(2px);
+            transition: transform .3s;
+        }
+        &.bar-mid {
+            opacity: 0;
+        }
+        &.bar-bottom {
+            transform: rotate(-30deg)translateY(-2px);
+            transition: transform .3s;
+        }
+    }
+}
+
+.bar-top {
+    transform: translateY(-4px);
+    transition: transform.3s;
+}
+
+.bar-bottom {
+    transform: translateY(4px);
+    transition: transform.3s;
+
+}
+
+.menu {
+    display: block;
+    font-size: 1rem;
+    text-transform: uppercase;
+    color: #fff;
+    font-weight: 800;
+    margin-left: 5px;
+}
+
+body.noscroll {
+    overflow: hidden;
+}
+
+.burger-musk {
+    display: none;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(34,34,34,.6);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index:1;
+}
+
+
+/*==================================================================
+# main
+================================================================= */
+
+/* first view
+-------------------------------------------------------------*/
+.fv {
+    height: 60vh;
+    min-height: 450px;
+
+    &::after {
+        content: '';
+        display: block;
+        position: absolute;
+        top: 0;
+        right: 0;
+        background-color: #222;
+        width: 50%;
+        height: 60vh;
+        min-height: 450px;
+        z-index: -1;
+    }
+}
+
+.kv-wrapper {
+    background: url(../img/heading-img.jpg) no-repeat center center/cover;
+    height: 86.86%;
+    width: 78.571%;
+    position: relative;
+}
+
+.copy-wrapper {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translate(50%, -50%);
+    color: #fff;
+
+    @include mq('sm'){
+        transform: translate(10%, -50%);
+    }
+}
+
+.page-title {
+    font-size: 7.2rem;
+    font-weight: 800;
+    text-transform: uppercase;
+
+    @include mq('sm'){
+        font-size: 5.2rem;
+    }
+}
+
+.page-detail {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+
+    @include mq('sm'){
+        font-size: 1.6rem;
+    }
+}
+
+/* vision
+-------------------------------------------------------------*/
+.vision-wrapper {
+    padding-left: 15.69%;
+
+    @include mq('sm'){
+        padding-left: 0;
+    }
+}
+
+.vision-title {
+    font-size: 2.4rem;
+    font-weight: 700;
+    margin-bottom: 30px;
+
+    @include mq('sm'){
+        margin-bottom: 35px;
+    }
+}
+
+.vision-text {
+    font-weight: 700;
+
+    @include mq('sm'){
+        font-size: 1.4rem;
+    }
+}
+
+
+/* ceo message
+-------------------------------------------------------------*/
+.ceo-content { 
+    margin-left: auto;
+
+    @include mq('md'){
+        padding: 120px 0 60px;
+        width: 840px;
+        max-width: 70%;
+
+    }
+
+    @include mq('sm'){
+        padding: 125px 0 80px;
+        width: 90%;
+        max-width: 345px;
+    }
+
+}
+
+.ceo-content-inner {
+    max-width: 400px;
+    padding: 0 30px;
+    margin: 0 auto;
+
+    @include mq('sm'){
+        padding: 0 28px;
+    }
+}
+
+.ceo-message {
+    @include mq('sm'){
+        font-size: 1.4rem;
+    }
+}
+
+.ceo-img {
+    position: absolute;
+    top: 0;
+    left: 30px;
+    width: 36.4%;
+
+    @include mq('sm'){
+        width: 90%;
+        max-width: 340px;
+        left: 0;
+    }
+}
+
+
+/* company
+-------------------------------------------------------------*/
+.company-list {
+    border-top: 1px solid #DDD;
+    margin-bottom: 40px;
+}
+
+.company-item {
+    padding: 20px 0;
+    border-bottom: 1px solid #DDD;
+    max-width: 800px;
+    display: flex;
+    margin-left: auto;
+}
+
+.company-item-title {
+    font-weight: 700;
+    width: 144px;
+
+    @include mq('sm'){
+        font-size: 1.4rem;
+    }
+}
+
+.company-item-detail {
+    @include mq('sm'){
+        font-size: 1.4rem;
+    }
+}
+
+
+.company-map {
+    position: relative;
+    width: 100%;
+    height: 0;
+    padding-top: 32.7%;
+
+    @include mq('sm'){
+        padding-top: 136.23%;
+    }
+}
+
+.company-map iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+
+/*==================================================================
+# footer
+================================================================= */
+.footer {
+    background-color: #525252;
+    line-height: 50px;
+    font-size: 1rem;
+    color: #fff;
+    text-align: center;
+    letter-spacing: .015em;
+}
